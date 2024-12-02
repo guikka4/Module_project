@@ -113,8 +113,9 @@ After all this was done, it was time to accept keys for the minion-master -Salt 
 
 Everything went good, and resulted in True -answers from minions.
 
-tähän p3
+![Add file: Upload](pictures/p3.png)
 
+## Installing Apache2 for minion1
 
 
 ### Sources
