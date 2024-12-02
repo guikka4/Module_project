@@ -6,7 +6,7 @@ The idea is to make a script which will install these computers, and Salt-master
 I use Vagrant with my hostOS, Windows. To control my virtual computers for commands, I use Vagrant SSH in Windows PowerShell.
 To download and install VirtualBox and Vagrant, visit https://www.virtualbox.org/wiki/Downloads & https://developer.hashicorp.com/vagrant/install.
 
-## Installing the VM:s, Salt-master and Salt-minion 12:45-13:40
+## Installing the VM:s, Salt-master and Salt-minion 12:45-13:50
 
 First task is to make a new project folder for the operating system, which will contain the Vagrantfile used to install and start the Virtual Machines. This happens in my user's folder (still in HostOS).
 
@@ -80,9 +80,11 @@ For better understanding of the repository downloads necessary for installing Sa
 Next step was to get the machines up and running, test network and that Salt was installed properly.
 
 First the startup. This took a few minutes, since the script installed and updated packages.
+
     vagrant up
 
 Secondly tested connections and salt installations. With `ping` I tested connections from minions to master. To exit SSH, I used `exit` in the commandline.
+
     vagrant ssh tminion1
     ping 192.168.12.3
     sudo systemctl status salt-minion.service
@@ -96,11 +98,22 @@ Secondly tested connections and salt installations. With `ping` I tested connect
 
 The result should look something like this
 
-![Add file: Upload](pictures/p1.png)
+![Add file: Upload](pictures/p2.png)
 
 My master daemon was in inactive status, so I started it with next command. After this it was active.
 
     sudo systemctl start salt-master.service
+
+After all this was done, it was time to accept keys for the minion-master -Salt connection with master-computer and test the connection
+
+    sudo salt-key --list all
+    sudo salt-key -A
+    
+    sudo salt '*' test.ping
+
+Everything went good, and resulted in True -answers from minions.
+
+tähän p3
 
 
 
