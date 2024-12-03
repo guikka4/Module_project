@@ -6,7 +6,7 @@ The idea is to make a script which will install these computers, and Salt-master
 I use Vagrant with my hostOS, Windows. To control my virtual computers for commands, I use Vagrant SSH in Windows PowerShell.
 To download and install VirtualBox and Vagrant, visit https://www.virtualbox.org/wiki/Downloads & https://developer.hashicorp.com/vagrant/install.
 
-## Installing the VM:s, Salt-master and Salt-minion 12:45-13:50
+## Installing the VM:s, Salt-master and Salt-minion 2.12.2024 12:45-13:50
 
 First task is to make a new project folder for the operating system, which will contain the Vagrantfile used to install and start the Virtual Machines. This happens in my user's folder (still in HostOS).
 
@@ -115,11 +115,74 @@ Everything went good, and resulted in True -answers from minions.
 
 ![Add file: Upload](pictures/p3.png)
 
-## Installing Apache2 for minion1
+## Installing Apache2 for minion1 3.12.2024 17:45-
 
+First I will install Apache2 daemon for master-computer and test it using Salt commands locally. When it's working, I will use salt to install it, and it's configuration files to minion1-computer using Salt.
+To do this, I will make a module directory for this daemon "project", make a Salt statement which will install apache2, make the config files and then test that it's working. I will also make a user and user directories for using apache.
+Tips: https://terokarvinen.com/2018/04/10/name-based-virtual-hosts-on-apache-multiple-websites-to-single-ip-address/, https://terokarvinen.com/2018/04/03/pkg-file-service-control-daemons-with-salt-change-ssh-server-port/?fromSearch=karvinen%20salt%20ssh & https://terokarvinen.com/2018/apache-user-homepages-automatically-salt-package-file-service-example/?fromSearch=apache
+
+First I installed apache by hand and changed the web page to test it.
+
+    $ master
+    sudo apt-get update
+    sudo apt-get -y install apache2
+
+    echo "Default"|sudo tee /var/www/html/index.html # is to change the localhost Default web page from Apache. Successfully
+    curl localhost # returned "Default"
+
+Then I made the apache configuration files
+
+    $ master
+    sudoedit /etc/apache2/sites-available/project1.conf
+
+    <VirtualHost *:80>
+      ServerName moduleproject.com
+      ServerAlias www.moduleproject.com
+
+              DocumentRoot /var/www/html/index.html
+              <Directory /var/www/html/index.html>
+
+                      Require all granted
+
+              </Directory>
+    </Virtualhost>
+
+    EDITOR=micro sudoedit /var/www/html/index.html
+
+    Try to test
+
+Then activated the new site and restarted apache.
+
+    sudo a2ensite project1.conf
+    sudo a2dissite 000-defaul.conf
+    sudo systemctl restart apache2
+    
+    # then check if the web page changed with
+
+    curl localhost
+
+tähän kuva4
+
+
+    
+    
+    
+When the hand-installation worked, I started with Salt. First I made the directory and went inside it
+
+    $ master
+    sudo mkdir -p /srv/salt/apache
+    cd /srv/salt/apache/
+
+Second I made the sls file to run the commands
+
+    $ master
+    sudoedit init.sls
 
 ### Sources
 
+- Karvinen, T. 2018. Apache with Salt. https://terokarvinen.com/2018/apache-user-homepages-automatically-salt-package-file-service-example/?fromSearch=apache
+- Karvinen, T. 2018. Pkg-file-service. https://terokarvinen.com/2018/04/03/pkg-file-service-control-daemons-with-salt-change-ssh-server-port/?fromSearch=karvinen%20salt%20ssh
+- Karvinen, T. 2018. Nane based virtual host https://terokarvinen.com/2018/04/10/name-based-virtual-hosts-on-apache-multiple-websites-to-single-ip-address/
 - Karvinen, T. 2023. Ready made vagrantfile for three computers. https://terokarvinen.com/2023/salt-vagrant/#infra-as-code---your-wishes-as-a-text-file
 - Salt repository. https://saltproject.io/blog/salt-project-package-repo-migration-and-guidance/
 - Vagrant. https://developer.hashicorp.com/vagrant/install
