@@ -161,9 +161,9 @@ Then activated the new site and restarted apache.
 
     curl localhost
 
-tähän p4
+![Add file: Upload](pictures/p4.png)
 
-## Installing apache and files to master with salt 3.12.2024 18:45-
+## Installing apache and files to master with salt 3.12.2024 18:45-19:20
     
 When the hand-installation worked, I started with Salt. First I made the directory and went inside it. Then copied the index-file I made earlier.
 
@@ -198,12 +198,42 @@ Second I made the sls file to run the commands. I Also want to make a new apache
           - file: /etc/apache2/sites-enabled/project1.conf
 
 Testing
+
     $ master
     sudo salt-call --local -l debug state.apply apache
     
 End result was not what I hoped for, the service watch does not work. But otherwise, It was good so moving on.
 
-tähän p5
+![Add file: Upload](pictures/p5.png)
+
+## Installing apache and files to minion1 with salt 3.12.2024 19:25-
+
+Now the salt state works locally and it is time to transit it to the minion1-computer. Still working with master, and only modifying the recently made init.sls -file in /srv/salt/apache.
+Making the config files first in the master computer, will help transmitting them with the package to the minion, which will be administrating the apache2 daemon in this project. I also took away the service watch, because it did not work yet.
+
+    $ master
+    sudoedit /srv/salt/apache/init.sls
+
+    apacheuser1:
+      user.present
+      
+      /home/apacheuser1/publicweb/index.html:
+        file.managed:
+          - source: "salt://apache/index.html"
+          - makedirs: True
+    
+    apache2:
+      pkg.installed
+      
+      /etc/apache2/sites-available/project1.conf:
+        file.managed:
+          - source: "salt://apache/project1.conf"
+
+Then used salt state to idempotent.
+
+    sudo salt 'tminion1' -l debug state.apply apache
+
+tähän p6 
 
 ### Sources
 
