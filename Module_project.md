@@ -123,7 +123,7 @@ Tips: https://terokarvinen.com/2018/04/10/name-based-virtual-hosts-on-apache-mul
 
 First I installed apache by hand and changed the web page to test it.
 
-    $ master
+    $ tmaster
     sudo apt-get update
     sudo apt-get -y install apache2
 
@@ -132,7 +132,7 @@ First I installed apache by hand and changed the web page to test it.
 
 Then I made the apache configuration files
 
-    $ master
+    $ tmaster
     sudoedit /etc/apache2/sites-available/project1.conf
 
     <VirtualHost *:80>
@@ -167,13 +167,13 @@ Then activated the new site and restarted apache.
     
 When the hand-installation worked, I started with Salt. First I made the directory and went inside it. Then copied the index-file I made earlier.
 
-    $ master
+    $ tmaster
     sudo mkdir -p /srv/salt/apache
     cd /srv/salt/apache/
 
 Second I made the sls file to run the commands. I Also want to make a new apacheuser1 -user for later use, so I will make it too.
 
-    $ master
+    $ tmaster
     sudoedit init.sls
 
    apacheuser1:
@@ -199,19 +199,19 @@ Second I made the sls file to run the commands. I Also want to make a new apache
 
 Testing
 
-    $ master
+    $ tmaster
     sudo salt-call --local -l debug state.apply apache
     
 End result was not what I hoped for, the service watch does not work. But otherwise, It was good so moving on.
 
 ![Add file: Upload](pictures/p5.png)
 
-## Installing apache and files to minion1 with salt 3.12.2024 19:25-
+## Installing apache and files to minion1 with salt 3.12.2024 19:25-20:00
 
 Now the salt state works locally and it is time to transit it to the minion1-computer. Still working with master, and only modifying the recently made init.sls -file in /srv/salt/apache.
 Making the config files first in the master computer, will help transmitting them with the package to the minion, which will be administrating the apache2 daemon in this project. I also took away the service watch, because it did not work yet.
 
-    $ master
+    $ tmaster
     sudoedit /srv/salt/apache/init.sls
 
     apacheuser1:
@@ -239,7 +239,7 @@ So the installations were good. Now it would be time to modify the configuration
 
 If you want to modify these with $master before applying the states to the minion, it's ok. The saved files will then be made to the minion-computer. You can also edit the files after applyin the states directly in $minion, which I did.
 
-    $ minion1
+    $ tminion1
     sudoedit /etc/apache2/sites-available/project1.conf
 
     <VirtualHost *:80>
@@ -277,17 +277,21 @@ If you want to modify these with $master before applying the states to the minio
 
 After making the necessary changes, I enabled the new config file and restarted the daemon.
 
-    $ minion1
+    $ tminion1
     sudo a2ensite project1.conf
     sudo a2dissite 000-default.conf
     sudo systemctl restart apache2
 
 Then tested the results, and it worked
 
-    $ minion1
+    $ tminion1
     curl localhost
 
-tähän p7
+![Add file: Upload](pictures/p3.png)
+
+## Installing PostgreSQL 3.12.2024 
+
+
 
 ### Sources
 
