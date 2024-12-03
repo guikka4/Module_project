@@ -115,7 +115,7 @@ Everything went good, and resulted in True -answers from minions.
 
 ![Add file: Upload](pictures/p3.png)
 
-## Installing Apache2 for minion1 3.12.2024 17:45-
+## Installing Apache2 for master 3.12.2024 17:45-18:40
 
 First I will install Apache2 daemon for master-computer and test it using Salt commands locally. When it's working, I will use salt to install it, and it's configuration files to minion1-computer using Salt.
 To do this, I will make a module directory for this daemon "project", make a Salt statement which will install apache2, make the config files and then test that it's working. I will also make a user and user directories for using apache.
@@ -161,22 +161,49 @@ Then activated the new site and restarted apache.
 
     curl localhost
 
-tähän kuva4
+tähän p4
 
-
+## Installing apache and files to master with salt 3.12.2024 18:45-
     
-    
-    
-When the hand-installation worked, I started with Salt. First I made the directory and went inside it
+When the hand-installation worked, I started with Salt. First I made the directory and went inside it. Then copied the index-file I made earlier.
 
     $ master
     sudo mkdir -p /srv/salt/apache
     cd /srv/salt/apache/
 
-Second I made the sls file to run the commands
+Second I made the sls file to run the commands. I Also want to make a new apacheuser1 -user for later use, so I will make it too.
 
     $ master
     sudoedit init.sls
+
+   apacheuser1:
+     user.present
+
+    /srv/salt/apache/index.html:
+      file.managed:
+        - source: "/var/www/html/index.html"
+
+    /srv/salt/apache/project1.conf:
+      file.managed:
+        - source: "/etc/apache2/sites-available/project1.conf"
+
+    apache2:
+      pkg.installed
+
+    apache2service:
+      service.running:
+        - name: apache2
+        - watch:
+          - file: /etc/apache2/sites-available/project1.conf
+          - file: /etc/apache2/sites-enabled/project1.conf
+
+Testing
+    $ master
+    sudo salt-call --local -l debug state.apply apache
+    
+End result was not what I hoped for, the service watch does not work. But otherwise, It was good so moving on.
+
+tähän p5
 
 ### Sources
 
