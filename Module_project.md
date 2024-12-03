@@ -287,7 +287,7 @@ Then tested the results, and it worked
     $ tminion1
     curl localhost
 
-![Add file: Upload](pictures/p3.png)
+![Add file: Upload](pictures/p7.png)
 
 ## Installing PostgreSQL 3.12.2024 
 
