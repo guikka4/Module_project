@@ -233,7 +233,61 @@ Then used salt state to idempotent.
 
     sudo salt 'tminion1' -l debug state.apply apache
 
-tähän p6 
+![Add file: Upload](pictures/p6.png)
+
+So the installations were good. Now it would be time to modify the configuration files.
+
+If you want to modify these with $master before applying the states to the minion, it's ok. The saved files will then be made to the minion-computer. You can also edit the files after applyin the states directly in $minion, which I did.
+
+    $ minion1
+    sudoedit /etc/apache2/sites-available/project1.conf
+
+    <VirtualHost *:80>
+      ServerName moduleproject.com
+      ServerAlias www.moduleproject.com
+
+              DocumentRoot /home/apacheuser1/publicweb/
+              <Directory /home/apacheuser1/publicweb/>
+
+                      Require all granted
+
+              </Directory>
+    </Virtualhost>
+
+    sudoedit /home/apacheuser1/publicweb/index.html
+
+    <!doctype html>
+
+      <html lang="fi">
+        <head>
+        <meta charset="UTF-8">
+        <title>Apachedrop with Salt</title>
+        </head>
+
+      <body>
+
+        <h1>Making some code to a new html file</h1>
+
+        <p>Testing scandic åäö</p>
+
+        <p>Dropped also a new user to administrate the apache<p>
+
+      </body>
+    </html>
+
+After making the necessary changes, I enabled the new config file and restarted the daemon.
+
+    $ minion1
+    sudo a2ensite project1.conf
+    sudo a2dissite 000-default.conf
+    sudo systemctl restart apache2
+
+Then tested the results, and it worked
+
+    $ minion1
+    curl localhost
+
+tähän p7
 
 ### Sources
 
