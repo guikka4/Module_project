@@ -288,7 +288,7 @@ Then tested the results, and it worked
     curl localhost
 
 ![Add file: Upload](pictures/p7.png)
-![Add file: Upload](pictures/p8.png)
+![Add file: Upload](pictures/p88.png)
 
 ## Installing PostgreSQL 3.12.2024 20:10-01:05
 
