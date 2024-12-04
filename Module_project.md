@@ -319,7 +319,7 @@ First downloading, then connecting to admin database user. Lastly making some ta
 
 I couldn't set the user priviledges to user vagrant for it's own database. So this was the end of this at this  time.
 
-## Dropping postgresql with salt 4.12.2024 02:10-
+## Dropping postgresql with salt 4.12.2024 02:10-03:40
 
     $ tmaster
     sudo mkdir -p /srv/salt/postgresql
@@ -334,7 +334,27 @@ I couldn't set the user priviledges to user vagrant for it's own database. So th
     
 idempotency below
 
-tähän p10
+![Add file: Upload](pictures/p10.png)
+
+    $ tminion2
+
+    sudo -u postgres psql
+    
+    postgres=# CREATE TABLE dinners (id SERIAL PRIMARY KEY, dish VARCHAR(50));
+    postgres=# INSERT INTO dinners(dish) VALUES ('fish and chips');
+    postgres=# INSERT INTO dinners(dish) VALUES ('peasoup');
+    postgres=# INSERT INTO dinners(dish) VALUES ('chicken');
+    postgres=# INSERT INTO dinners(dish) VALUES ('pizza');
+    postgres=# SELECT * FROM dinners;
+
+tähän p11
+
+I still couldn't get a connection to the database from a client which is pgadmin.
+
+tähän p12
+
+## making a top file
+
 
 ### Sources
 
