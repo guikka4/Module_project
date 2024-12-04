@@ -315,10 +315,26 @@ First downloading, then connecting to admin database user. Lastly making some ta
 
     postgres=# SELECT * FROM test_table;
 
-tähän p9
+![Add file: Upload](pictures/p9.png)
 
 I couldn't set the user priviledges to user vagrant for it's own database. So this was the end of this at this  time.
+
+## Dropping postgresql with salt 4.12.2024 02:10-
+
+    $ tmaster
+    sudo mkdir -p /srv/salt/postgresql
+    cd /srv/salt/postgresql
     
+    sudoedit init.sls
+
+    postgresql:
+      pkg.installed
+
+    sudo salt 'tminion2' -l debug state.apply postgresql
+    
+idempotency below
+
+tähän p10
 
 ### Sources
 
