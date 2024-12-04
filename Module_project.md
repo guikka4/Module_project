@@ -347,13 +347,38 @@ idempotency below
     postgres=# INSERT INTO dinners(dish) VALUES ('pizza');
     postgres=# SELECT * FROM dinners;
 
-tähän p11
+![Add file: Upload](pictures/p11.png)
 
 I still couldn't get a connection to the database from a client which is pgadmin.
 
-tähän p12
+![Add file: Upload](pictures/p12.png)
 
-## making a top file
+## making a top file 4.12.2024 03:45-
+
+To top it all, I made a base file to the master-computer. Just to push all these together for all necessary minions. For fun, I added a few more packages for all the minions! Tips https://terokarvinen.com/2023/salt-vagrant/#infra-as-code---your-wishes-as-a-text-file
+
+    $ tmaster
+
+    # for the extras
+    sudo mkdir -p /srv/salt/funnies
+    sudoedit /srv/salt/funnies/init.sls
+    
+    cowsay:
+      pkg.installed
+
+    tree:
+      pkg.installed
+
+    micro:
+      pkg.installed
+
+    # testing 
+    # for the top
+    sudoedit /srv/salt/top.sls
+
+    sudo salt '*' -l debug state.apply # in the /srv/salt/ directory
+
+tähän p13 p14
 
 
 ### Sources
@@ -362,6 +387,7 @@ tähän p12
 - Karvinen, T. 2018. Apache with Salt. https://terokarvinen.com/2018/apache-user-homepages-automatically-salt-package-file-service-example/?fromSearch=apache
 - Karvinen, T. 2018. Pkg-file-service. https://terokarvinen.com/2018/04/03/pkg-file-service-control-daemons-with-salt-change-ssh-server-port/?fromSearch=karvinen%20salt%20ssh
 - Karvinen, T. 2018. Nane based virtual host https://terokarvinen.com/2018/04/10/name-based-virtual-hosts-on-apache-multiple-websites-to-single-ip-address/
+- Karvinen, T. 2023. Infra as a code. https://terokarvinen.com/2023/salt-vagrant/#infra-as-code---your-wishes-as-a-text-file
 - Karvinen, T. 2023. Ready made vagrantfile for three computers. https://terokarvinen.com/2023/salt-vagrant/#infra-as-code---your-wishes-as-a-text-file
 - Neon Tech. 2024. Connecting to a PostgreSQL server. https://neon.tech/postgresql/postgresql-getting-started/connect-to-postgresql-database
 - PGAdmin. Installing PGadmin. https://www.pgadmin.org/download/pgadmin-4-apt/
