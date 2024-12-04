@@ -353,7 +353,7 @@ I still couldn't get a connection to the database from a client which is pgadmin
 
 ![Add file: Upload](pictures/p12.png)
 
-## making a top file 4.12.2024 03:45-
+## making a top file 4.12.2024 03:45-04:10
 
 To top it all, I made a base file to the master-computer. Just to push all these together for all necessary minions. For fun, I added a few more packages for all the minions! Tips https://terokarvinen.com/2023/salt-vagrant/#infra-as-code---your-wishes-as-a-text-file
 
@@ -378,7 +378,7 @@ To top it all, I made a base file to the master-computer. Just to push all these
 
     sudo salt '*' -l debug state.apply # in the /srv/salt/ directory
 
-tähän p13 p14
+![Add file: Upload](pictures/p13.png) ![Add file: Upload](pictures/p14.png)
 
 
 ### Sources
