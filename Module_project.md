@@ -289,16 +289,46 @@ Then tested the results, and it worked
 
 ![Add file: Upload](pictures/p7.png)
 
-## Installing PostgreSQL 3.12.2024 
+## Installing PostgreSQL 3.12.2024 20:10-01:05
 
+Purpose is to install PostgreSQL to the second minion-computer tminion2. But first it was better to do it manually, before using salt.
+So my first task was to install the package itself, make some tables and add data for the database and then check if I could connect to the database with a graphic ui.
+Tips https://terokarvinen.com/2016/postgresql-install-and-one-table-database-sql-crud-tutorial-for-ubuntu/?fromSearch=postgre, https://www.pgadmin.org/download/pgadmin-4-apt/ & https://neon.tech/postgresql/postgresql-getting-started/connect-to-postgresql-database, plus `man postgresql`.
 
+First downloading, then connecting to admin database user. Lastly making some tables and printing them
+
+    sudo apt-get -y install postgresql # installation
+    sudo -u postgres createdb vagrant # database
+    sudo -u postgres createuser vagrant # databaseuser
+    psql # entry to database
+
+    vagrant=> CREATE TABLE test_table (id SERIAL PRIMARY KEY, testnumber VARCHAR(15)); # add table
+
+    ERROR:  permission denied for schema public # so the user vagrant does not have priviledges. So I went back to the administrator user postgres
+
+    exit
+    sudo -u postgres psql
+    postgres=# CREATE TABLE test_table (id SERIAL PRIMARY KEY, testnumber VARCHAR(15)); # add table
+    postgres=# INSERT INTO test_table(testnumber) VALUES ('testnumber1'); # added data
+    postgres=# INSERT INTO test_table(testnumber) VALUES ('testnumber2'); # added data
+    postgres=# INSERT INTO test_table(testnumber) VALUES ('testnumber3'); # added data
+
+    postgres=# SELECT * FROM test_table;
+
+tähän p9
+
+I couldn't set the user priviledges to user vagrant for it's own database. So this was the end of this at this  time.
+    
 
 ### Sources
 
+- Karvinen, T. 2016. PostgreSQL Install one table database. https://terokarvinen.com/2016/postgresql-install-and-one-table-database-sql-crud-tutorial-for-ubuntu/?fromSearch=postgre
 - Karvinen, T. 2018. Apache with Salt. https://terokarvinen.com/2018/apache-user-homepages-automatically-salt-package-file-service-example/?fromSearch=apache
 - Karvinen, T. 2018. Pkg-file-service. https://terokarvinen.com/2018/04/03/pkg-file-service-control-daemons-with-salt-change-ssh-server-port/?fromSearch=karvinen%20salt%20ssh
 - Karvinen, T. 2018. Nane based virtual host https://terokarvinen.com/2018/04/10/name-based-virtual-hosts-on-apache-multiple-websites-to-single-ip-address/
 - Karvinen, T. 2023. Ready made vagrantfile for three computers. https://terokarvinen.com/2023/salt-vagrant/#infra-as-code---your-wishes-as-a-text-file
+- Neon Tech. 2024. Connecting to a PostgreSQL server. https://neon.tech/postgresql/postgresql-getting-started/connect-to-postgresql-database
+- PGAdmin. Installing PGadmin. https://www.pgadmin.org/download/pgadmin-4-apt/
 - Salt repository. https://saltproject.io/blog/salt-project-package-repo-migration-and-guidance/
 - Vagrant. https://developer.hashicorp.com/vagrant/install
 - VirtualBox. https://www.virtualbox.org/wiki/Downloads
